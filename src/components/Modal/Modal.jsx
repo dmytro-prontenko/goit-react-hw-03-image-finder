@@ -5,6 +5,7 @@ export const Modal = ({ children, onCloseModal }) => {
   const onBackDropClick = e => {
 		if (e.currentTarget === e.target) {
 			onCloseModal()
+      cleanup()
 		}
 	}
 
