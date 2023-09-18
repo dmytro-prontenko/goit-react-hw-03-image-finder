@@ -45,7 +45,16 @@ class SearchBar extends React.Component {
 SearchBar.propTypes = {
   setQuery: PropTypes.func,
   getImages: PropTypes.func,
-  data:PropTypes.arrayOf(PropTypes.object),
-}
+  data: PropTypes.shape({
+      currentImg: PropTypes.string,
+      isOpen: PropTypes.bool,
+      items: PropTypes.array,
+      loading: PropTypes.bool,
+      page: PropTypes.number,
+      per_page: PropTypes.number,
+      q:PropTypes.string,
+      totalHits:PropTypes.number,
+    }),
+};
 
 export default SearchBar;

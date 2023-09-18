@@ -8,7 +8,6 @@ import './ImageGallery.css';
 class ImageGallery extends Component {
   render() {
     const dataToInsert = this.props.imagesToView.map(item => {
-      console.log(item)
       return (
         <ImageGalleryItem
           item={item}
