@@ -12,11 +12,10 @@ class SearchBar extends React.Component {
   };
 
   handleSubmit = e => {
-
     e.preventDefault();
     this.props.setQuery(this.state.currentQuery);
-    
-    this.setState({ currentQuery: '',});
+
+    this.setState({ currentQuery: '' });
   };
 
   render() {
@@ -24,6 +23,7 @@ class SearchBar extends React.Component {
       <>
         <StyledHeader className="search-bar">
           <StyledForm className="form" onSubmit={this.handleSubmit}>
+            <Button />
             <StyledInput
               className="input"
               type="text"
@@ -34,7 +34,6 @@ class SearchBar extends React.Component {
               onChange={this.handleInputChange}
               value={this.state.currentQuery}
             />
-            <Button/>
           </StyledForm>
         </StyledHeader>
       </>

@@ -6,6 +6,7 @@ import { ToastContainer, toast } from 'react-toastify';
 import { StyledLoadMore } from './LoadMoreButton/LoadMoreButton.Styled';
 import 'react-toastify/dist/ReactToastify.css';
 import Loader from './Loader/Loader';
+import { Modal } from './Modal/Modal';
 
 class App extends Component {
   state = {
@@ -15,6 +16,9 @@ class App extends Component {
     page: 1,
     per_page: 12,
     totalHits: null,
+    isOpen: false,
+    currentImg:"",
+    currentImgId:"",
   };
 
   async componentDidUpdate(prevProps, prevState) {
@@ -57,15 +61,22 @@ class App extends Component {
 
   setQuery = q => {
     this.setState({ q, page: 1, items: [] });
-    // this.setState({  });
   };
 
   handleLoadMore = () => {
     this.setState(prev => ({ page: prev.page + 1 }));
   };
 
+  handleModalOpen = (id, img) => {
+    this.setState(prev => ({
+      isOpen: !prev.isOpen,
+      currentImg:img,
+      currentImgId:id,
+    }));
+  };
+
   render() {
-    const { per_page, totalHits } = this.state;
+    const { isOpen,totalHits, isModalOpen } = this.state;
     return (
       <>
         <SearchBar
@@ -75,7 +86,7 @@ class App extends Component {
         />
         {this.state.items.length ? (
           <>
-            <ImageGallery imagesToView={this.state.items} />
+            <ImageGallery imagesToView={this.state.items} modalStatus={isOpen} handleModal={this.handleModalOpen}/>
             {this.state.items.length < totalHits && (
               <StyledLoadMore type="button" onClick={this.handleLoadMore}>
                 Load more
@@ -83,6 +94,9 @@ class App extends Component {
             )}
           </>
         ) : null}
+        {isOpen && <Modal onCloseModal={this.handleModalOpen}>
+          <img src={this.state.currentImg} alt=""/>
+        </Modal>}
       </>
     );
   }

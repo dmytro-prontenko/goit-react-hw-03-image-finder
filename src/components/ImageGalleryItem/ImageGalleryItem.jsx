@@ -1,13 +1,22 @@
 import React from 'react';
-import "./ImageGalleryItem.css"
+import './ImageGalleryItem.css';
 
+const ImageGalleryItem = (props) => {
+  const onImageGalleryItemClick = item => {
+    props.handleModal(props.item.id, props.item.largeImageURL)
 
-const ImageGalleryItem = ({item}) => {
+  };
+
   return (
-    <li className="gallery-item" >
-      <img className='gallery-item-img' src={item.webformatURL} alt={item.tags} />
+    <li className="gallery-item" onClick={onImageGalleryItemClick}>
+      <img
+        className="gallery-item-img"
+        src={props.item.webformatURL}
+        alt={props.item.tags}
+      />
     </li>
   );
 };
 
 export default ImageGalleryItem;
+

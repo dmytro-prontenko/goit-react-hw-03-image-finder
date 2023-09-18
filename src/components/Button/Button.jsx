@@ -1,10 +1,11 @@
 import React from 'react'
-import { StyledButton } from './Button.Styled'
+import { StyledButton, StyledSpan } from './Button.Styled'
+import svg from '../../icons8-search.svg'
 
 const Button = () => {
   return (
     <StyledButton type="submit" className="button">
-    <span className="button-label">Search</span>
+    <img src={svg} alt="search" width="28" height="28"/>
   </StyledButton>
   )
 }
