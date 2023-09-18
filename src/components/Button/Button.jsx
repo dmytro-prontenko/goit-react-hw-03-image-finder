@@ -1,5 +1,5 @@
 import React from 'react'
-import { StyledButton, StyledSpan } from './Button.Styled'
+import { StyledButton } from './Button.Styled'
 import svg from '../../icons8-search.svg'
 
 const Button = () => {
