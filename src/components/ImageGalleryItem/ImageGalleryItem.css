@@ -1,9 +1,9 @@
 .gallery-item {
-  width: 200px;
-  height: 200px;
+  width: 300px !important;
+  height: 200px !important;
   overflow: hidden;
 }
 
 .gallery-item-img {
-  width: 200px;
+  width: 350px !important;
 }

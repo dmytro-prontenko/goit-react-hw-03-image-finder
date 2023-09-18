@@ -12,10 +12,11 @@ class SearchBar extends React.Component {
   };
 
   handleSubmit = e => {
+
     e.preventDefault();
     this.props.setQuery(this.state.currentQuery);
-    this.props.getImages(this.state.currentQuery)
-    this.setState({ currentQuery: '' });
+    
+    this.setState({ currentQuery: '',});
   };
 
   render() {

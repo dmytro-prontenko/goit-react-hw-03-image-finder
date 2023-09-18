@@ -4,7 +4,7 @@ export const StyledHeader = styled.header`
   display: flex;
   justify-content: center;
   align-items: center;
-  background-color: #6b9080;
+  background-color: #1d2d44;
   padding: 20px;
 `;
 
@@ -20,8 +20,8 @@ export const StyledInput = styled.input`
   border-radius: 3px;
   border: none;
   padding-left: 5px;
-  color: #6e8190;
-  background-color: #eaf4f4;
+  color: #1d2d44;
+  background-color: #f0ebd8;
 `;
 
 
