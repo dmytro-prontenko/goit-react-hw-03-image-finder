@@ -6,17 +6,11 @@ import "./ImageGallery.css"
 // export default ImageGallery;
 
 class ImageGallery extends Component {
-  state = {
-    items: this.props.imagesToView,
-    loading:false,
-    page: 1,
-    per_page: 12,
-  };
+  
 
   render() {
-    const dataToInsert = this.state.items.map(item => {
-      console.log(item)
-      return <ImageGalleryItem item={item} key={nanoid()}/>
+    const dataToInsert = this.props.imagesToView.map(item => {
+      return <ImageGalleryItem item={item} key={item.id}/>
     })
     return (
       <ul className="gallery">

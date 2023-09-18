@@ -12,5 +12,5 @@ export async function getData(config) {
     },
   });
 
-  return data.hits;
+  return data;
 }

@@ -3,6 +3,7 @@ import SearchBar from './SearchBar/SearchBar';
 import ImageGallery from './ImageGallery/ImageGallery';
 import { getData } from 'services/imgAPI';
 import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 class App extends Component {
   state = {
@@ -11,64 +12,82 @@ class App extends Component {
     q: '',
     page: 1,
     per_page: 12,
+    totalHits:null
   };
 
   async componentDidUpdate(prevProps, prevState) {
-    const { page, q, per_page } = this.state;
-    const data = await getData({
-      q,
-      page,
-      per_page,
-    });
-    if (prevState.page !== page) {
-      this.setState(prevState => ({
-        items: [...prevState.items, ...data],
-        // page: prevState.page + 1,
-      }));
+    const { page, q, per_page, totalHits} = this.state;
+
+    try {
+      const { hits } = await getData({
+        q,
+        page,
+        per_page,
+      });
+      if (prevState.page !== page) {
+        this.setState(prevState => ({
+          items: [...prevState.items, ...hits],
+        }));
+        toast.success(
+          `Shown ${
+            per_page * page <= totalHits ? per_page * page : totalHits
+          } images from ${totalHits}`,
+          {
+            position: 'top-right',
+            autoClose: 1000,
+            hideProgressBar: true,
+            closeOnClick: true,
+            theme: 'colored',
+          }
+        );
+      }
+    } catch (error) {
+      toast.error(`${error.message}`, {
+        position: 'top-right',
+        autoClose: 1000,
+        hideProgressBar: true,
+        closeOnClick: true,
+        theme: 'colored',
+      });
     }
-
-    // const { page, q, per_page } = this.state;
-
-    //   try {
-    //     const data = await getData({
-    //       q,
-    //       page,
-    //       per_page,
-    //     });
-    //     this.setState(prevState => ({
-    //       items: [...prevState.items, ...data],
-    //       // page: prevState.page + 1,
-    //     }));
-    //   } catch (error) {
-    //     toast.error(`${error.message}`);
-    //   } finally {
-    //     console.log('Done');
-    //   }
-
-    // this.handleFetchImages(this.state.searchQuery)
   }
 
   setQuery = q => {
     this.setState({ q });
-    console.log(`Form submited with ${q}`);
   };
 
   handleFetchImages = async searchQuery => {
     const { page, q, per_page } = this.state;
 
     try {
-      const data = await getData({
+      const { hits, totalHits } = await getData({
         q: searchQuery,
         page,
         per_page,
       });
-      this.setState({
-        items: [...data],
-      });
+      if (hits.length) {
+        this.setState({
+          items: [...hits], totalHits
+        });
+        toast.success(`Shown ${per_page} images from ${totalHits}`, {
+          position: 'top-right',
+          autoClose: 1000,
+          hideProgressBar: true,
+          closeOnClick: true,
+          theme: 'colored',
+        });
+      } else {
+        throw new Error('Nothing found');
+      }
     } catch (error) {
-      toast.error(`${error.message}`);
+      toast.error(`${error.message}`, {
+        position: 'top-right',
+        autoClose: 1000,
+        hideProgressBar: true,
+        closeOnClick: true,
+        theme: 'colored',
+      });
     } finally {
-      console.log('Done');
     }
   };
 
@@ -77,6 +96,7 @@ class App extends Component {
   };
 
   render() {
+    const {per_page,totalHits} = this.state
     return (
       <>
         <SearchBar
@@ -86,12 +106,11 @@ class App extends Component {
         {this.state.items.length ? (
           <>
             <ImageGallery imagesToView={this.state.items} />
-            <button type="button" onClick={this.handleLoadMore}>
+            {this.state.items.length < totalHits &&  <button type="button" onClick={this.handleLoadMore}>
               Load more
-            </button>
+            </button>}
           </>
         ) : null}
-        <ToastContainer />
       </>
     );
   }
