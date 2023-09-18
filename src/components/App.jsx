@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
 import SearchBar from './SearchBar/SearchBar';
 import ImageGallery from './ImageGallery/ImageGallery';
+import Loader from './Loader/Loader';
 import { getData } from 'services/imgAPI';
-import { ToastContainer, toast } from 'react-toastify';
+import { toast } from 'react-toastify';
 import { StyledLoadMore } from './LoadMoreButton/LoadMoreButton.Styled';
 import 'react-toastify/dist/ReactToastify.css';
-import Loader from './Loader/Loader';
 import { Modal } from './Modal/Modal';
 
 class App extends Component {
@@ -17,13 +17,14 @@ class App extends Component {
     per_page: 12,
     totalHits: null,
     isOpen: false,
-    currentImg:"",
-    currentImgId:"",
+    currentImg: '',
+    currentImgId: '',
   };
 
   async componentDidUpdate(prevProps, prevState) {
     const { page, q, per_page } = this.state;
     if (prevState.page !== page || prevState.q !== q) {
+      this.setState({ loading: true });
       try {
         const { hits, totalHits } = await getData({
           q,
@@ -35,6 +36,8 @@ class App extends Component {
           items: [...prevState.items, ...hits],
           totalHits,
         }));
+        if (!totalHits)
+          throw new Error('Nothing found. Please, try another query');
         toast.success(
           `Shown ${
             per_page * page <= totalHits ? per_page * page : totalHits
@@ -55,6 +58,8 @@ class App extends Component {
           closeOnClick: true,
           theme: 'colored',
         });
+      } finally {
+        this.setState({ loading: false });
       }
     }
   }
@@ -70,13 +75,13 @@ class App extends Component {
   handleModalOpen = (id, img) => {
     this.setState(prev => ({
       isOpen: !prev.isOpen,
-      currentImg:img,
-      currentImgId:id,
+      currentImg: img,
+      currentImgId: id,
     }));
   };
 
   render() {
-    const { isOpen,totalHits, isModalOpen } = this.state;
+    const { isOpen, totalHits, loading, items, currentImg } = this.state;
     return (
       <>
         <SearchBar
@@ -84,19 +89,27 @@ class App extends Component {
           getImages={this.handleFetchImages}
           data={this.state}
         />
-        {this.state.items.length ? (
+        {items.length ? (
           <>
-            <ImageGallery imagesToView={this.state.items} modalStatus={isOpen} handleModal={this.handleModalOpen}/>
-            {this.state.items.length < totalHits && (
+            {loading && !items.length && <Loader />}
+
+            <ImageGallery
+              imagesToView={items}
+              modalStatus={isOpen}
+              handleModal={this.handleModalOpen}
+            />
+            {items.length < totalHits && (
               <StyledLoadMore type="button" onClick={this.handleLoadMore}>
-                Load more
+                {loading ? 'Loading...' : 'Load more'}
               </StyledLoadMore>
             )}
           </>
         ) : null}
-        {isOpen && <Modal onCloseModal={this.handleModalOpen}>
-          <img src={this.state.currentImg} alt=""/>
-        </Modal>}
+        {isOpen && (
+          <Modal onCloseModal={this.handleModalOpen}>
+            <img src={currentImg} alt="" />
+          </Modal>
+        )}
       </>
     );
   }

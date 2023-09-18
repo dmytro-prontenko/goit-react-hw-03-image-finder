@@ -2,8 +2,28 @@ import React from 'react';
 import { styled } from 'styled-components';
 
 export const Modal = ({ children, onCloseModal }) => {
+  const onBackDropClick = e => {
+		if (e.currentTarget === e.target) {
+			onCloseModal()
+		}
+	}
+
+  const onEscKeyPress = e => {
+    if (e.key === 'Escape') {
+      onCloseModal();
+      cleanup()
+    }
+  }
+
+  document.addEventListener('keydown', onEscKeyPress);
+
+
+  const cleanup = () => {
+    document.removeEventListener('keydown', onEscKeyPress);
+  }
+
   return (
-    <Wrapper>
+    <Wrapper onClick={onBackDropClick}>
       <Content>
         <StyledButtonClose onClick={onCloseModal}>Close</StyledButtonClose>
         <Childrens>{children}</Childrens>
