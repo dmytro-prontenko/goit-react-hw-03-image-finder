@@ -1,6 +1,7 @@
 import React from 'react';
 import { StyledForm, StyledHeader, StyledInput } from './SearchBar.Styled';
 import Button from 'components/Button/Button';
+import PropTypes from 'prop-types';
 
 class SearchBar extends React.Component {
   state = {
@@ -39,6 +40,12 @@ class SearchBar extends React.Component {
       </>
     );
   }
+}
+
+SearchBar.propTypes = {
+  setQuery: PropTypes.func,
+  getImages: PropTypes.func,
+  data:PropTypes.arrayOf(PropTypes.object),
 }
 
 export default SearchBar;

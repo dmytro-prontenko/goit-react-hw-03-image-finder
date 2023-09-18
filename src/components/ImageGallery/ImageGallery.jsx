@@ -1,6 +1,6 @@
 import ImageGalleryItem from 'components/ImageGalleryItem/ImageGalleryItem';
 import React, { Component } from 'react';
-import { nanoid } from 'nanoid';
+import PropTypes from 'prop-types';
 import './ImageGallery.css';
 
 // export default ImageGallery;
@@ -8,6 +8,7 @@ import './ImageGallery.css';
 class ImageGallery extends Component {
   render() {
     const dataToInsert = this.props.imagesToView.map(item => {
+      console.log(item)
       return (
         <ImageGalleryItem
           item={item}
@@ -21,5 +22,10 @@ class ImageGallery extends Component {
   }
 }
 
-export default ImageGallery;
+ImageGallery.propTypes = {
+  imagesToView: PropTypes.arrayOf(PropTypes.object),
+  modalStatus:PropTypes.bool,
+  handleModal:PropTypes.func,
+};
 
+export default ImageGallery;

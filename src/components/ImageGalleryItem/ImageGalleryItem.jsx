@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import './ImageGalleryItem.css';
 
 const ImageGalleryItem = (props) => {
@@ -16,6 +17,12 @@ const ImageGalleryItem = (props) => {
       />
     </li>
   );
+};
+
+ImageGalleryItem.propTypes = {
+  item: PropTypes.object,
+  modalStatus:PropTypes.bool,
+  handleModal:PropTypes.func,
 };
 
 export default ImageGalleryItem;

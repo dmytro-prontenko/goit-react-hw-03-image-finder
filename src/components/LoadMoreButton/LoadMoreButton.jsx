@@ -1,9 +1,9 @@
 import React from 'react'
-import { StyledLoadMore } from './LoadMoreButton.Styled'
+import PropTypes from 'prop-types';
 
 const LoadMoreButton = (onClick) => {
   const loadMore = () => {
-    this.props.onClick()
+    onClick()
   }
   return (
     <button type='button' onClick={loadMore}>
@@ -11,6 +11,9 @@ const LoadMoreButton = (onClick) => {
   )
 }
 
+LoadMoreButton.propTypes = {
+  onClick:PropTypes.func,
+}
 
 
 export default LoadMoreButton
