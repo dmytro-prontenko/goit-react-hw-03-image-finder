@@ -1,6 +1,7 @@
-import ImageGalleryItem from 'components/ImageGalleryItem/ImageGalleryItem/ImageGalleryItem';
+import ImageGalleryItem from 'components/ImageGalleryItem/ImageGalleryItem';
 import React, { Component } from 'react';
 import { nanoid } from 'nanoid';
+import "./ImageGallery.css"
 
 // export default ImageGallery;
 
@@ -14,6 +15,7 @@ class ImageGallery extends Component {
 
   render() {
     const dataToInsert = this.state.items.map(item => {
+      console.log(item)
       return <ImageGalleryItem item={item} key={nanoid()}/>
     })
     return (

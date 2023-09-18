@@ -7,14 +7,26 @@ import { ToastContainer, toast } from 'react-toastify';
 class App extends Component {
   state = {
     items: [],
-    loading:false,
+    loading: false,
     q: '',
     page: 1,
     per_page: 12,
   };
 
-
   async componentDidUpdate(prevProps, prevState) {
+    const { page, q, per_page } = this.state;
+    const data = await getData({
+      q,
+      page,
+      per_page,
+    });
+    if (prevState.page !== page) {
+      this.setState(prevState => ({
+        items: [...prevState.items, ...data],
+        // page: prevState.page + 1,
+      }));
+    }
+
     // const { page, q, per_page } = this.state;
 
     //   try {
@@ -32,6 +44,8 @@ class App extends Component {
     //   } finally {
     //     console.log('Done');
     //   }
+
+    // this.handleFetchImages(this.state.searchQuery)
   }
 
   setQuery = q => {
@@ -48,10 +62,9 @@ class App extends Component {
         page,
         per_page,
       });
-      this.setState(prevState => ({
-        items: [...prevState.items, ...data],
-        // page: prevState.page + 1,
-      }));
+      this.setState({
+        items: [...data],
+      });
     } catch (error) {
       toast.error(`${error.message}`);
     } finally {
@@ -60,8 +73,8 @@ class App extends Component {
   };
 
   handleLoadMore = () => {
-    this.setState(prev => ({page:prev.page +1}))
-  }
+    this.setState(prev => ({ page: prev.page + 1 }));
+  };
 
   render() {
     return (
@@ -71,7 +84,12 @@ class App extends Component {
           getImages={this.handleFetchImages}
         />
         {this.state.items.length ? (
-          <ImageGallery imagesToView={this.state.items} />
+          <>
+            <ImageGallery imagesToView={this.state.items} />
+            <button type="button" onClick={this.handleLoadMore}>
+              Load more
+            </button>
+          </>
         ) : null}
         <ToastContainer />
       </>
